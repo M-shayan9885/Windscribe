@@ -30,10 +30,26 @@ ctk.set_widget_scaling(1.0)
 ctk.set_window_scaling(1.0)
 
 BASE_DIR = Path(__file__).resolve().parent if Path(__file__).resolve().parent.exists() else Path.cwd()
+if getattr(sys, "frozen", False):
+    APP_PATH = str(Path(sys.executable).resolve().parent)
+else:
+    APP_PATH = str(BASE_DIR)
 
 
 def resolve_asset_path(filename: str) -> str:
-    return str((BASE_DIR / filename).resolve())
+    app_asset = Path(APP_PATH) / filename
+    if app_asset.exists():
+        return str(app_asset.resolve())
+
+    bundle_dir = Path(getattr(sys, "_MEIPASS", BASE_DIR))
+    bundled_asset = bundle_dir / filename
+    if bundled_asset.exists():
+        return str(bundled_asset.resolve())
+    return str(app_asset.resolve())
+
+
+def resolve_data_path(filename: str) -> str:
+    return str((Path(APP_PATH) / filename).resolve())
 
 
 def canonical_country_name(value: str) -> str:
@@ -108,13 +124,8 @@ DEFAULT_PROTOCOLS = {
     "wstunnel": [443]
 }
 
-if getattr(sys, 'frozen', False):
-    APP_PATH = str(Path(sys.executable).resolve().parent)
-else:
-    APP_PATH = str(BASE_DIR)
-
-DB_FILE = resolve_asset_path("windscribe_results.db")
-CONFIG_FILE = resolve_asset_path("config.json")
+DB_FILE = resolve_data_path("windscribe_results.db")
+CONFIG_FILE = resolve_data_path("config.json")
 CSV_FILE = resolve_asset_path("cities_extended.csv")
 MAX_VISIBLE_LOG_LINES = 5000
 RETAINED_LOG_LINES = 4000

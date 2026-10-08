@@ -44,19 +44,42 @@ Before launching WALF, ensure your environment meets the following baseline crit
 
 ### Option 1: Fast Setup (Recommended for Windows)
 No Python installation or dependency configuration is required.
-1. Head over to the **[GitHub Releases](../../releases)** page of this repository.
-2. Download the latest `walf.zip` archive.
-3. Extract the contents of `walf.zip` into your desired project folder.
-4. Ensure your configuration asset (`cities_extended.csv`) is placed in that **same exact directory** alongside `walf.exe`.
-5. Double-click `walf.exe` to launch the application immediately.
+1. Build `WALF.exe` from source using the instructions below, or download it from Releases when a release is available.
+2. Place the executable in a writable folder.
+3. Double-click `WALF.exe` to launch the application. The location data is bundled into the executable; settings, database results, and reports are stored beside it.
 
 ### Option 2: Running from Source Code
 If you prefer running, modifying, or auditing the script manually, clone the repository and fetch the dependencies using the provided `requirements.txt`:
 
 ```bash
 # Clone the repository
-git clone [https://github.com/yourusername/walf.git](https://github.com/yourusername/walf.git)
-cd walf
+git clone https://github.com/M-shayan9885/Windscribe.git
+cd Windscribe
 
 # Install python dependencies from requirements.txt
 pip install -r requirements.txt
+```
+
+### Building the Windows executable
+On Windows, install the build dependencies and run `build_exe.bat`. The single-file application is created at `dist\WALF.exe`:
+
+```bat
+python -m pip install -r requirements-build.txt
+build_exe.bat
+```
+
+The executable includes the location CSV and Python dependencies. Windscribe Desktop and its CLI must still be installed and signed in on the computer running WALF.
+
+### Running the manual version in Termux (Android)
+The Termux version is a terminal interface. Android does not expose the desktop `windscribe-cli` to it, so switch servers in the Windscribe Android app yourself; WALF records your confirmation and can then run a Speedtest over the current connection.
+
+```sh
+pkg update
+pkg install python git
+git clone https://github.com/M-shayan9885/Windscribe.git
+cd Windscribe
+python -m pip install -r requirements-termux.txt
+python termux_walf.py
+```
+
+The Android app's connection state and protocol/port are not controlled or verified by Termux. Protocol is recorded as a user-entered label and port is optional report metadata. If the Android app shows a different server label, enter that label when prompted. Saved duration includes manual app switching/confirmation and is not an automatic connection-time measurement. The database and reports are stored in `~/.walf/`.

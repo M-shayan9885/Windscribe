@@ -223,6 +223,8 @@ __marimo__/
 build
 dist
 walf.spec
+walf
+WALF.spec
 config.json
 windscribe_results.db
 reports/
